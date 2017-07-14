@@ -1,0 +1,25 @@
+#!/bin/bash
+alias repo=OpenRepo
+
+function OpenRepo()
+{
+	if [ ! -d .git ] ; 
+        then echo "ERROR: This isnt a git directory" && return false; 
+    fi
+    git_url=`git config --get remote.origin.url`
+    echo "${git_url}";
+
+    if [ $git_url != git@bitbucket.org:* ] -a [ $git_url != git@github.com:* ] ;
+        then echo "ERROR: Remote origin is invalid" && return false;
+    fi
+    if [[ $git_url == git@bitbucket.org:* ]] ;
+        then 
+            url="${git_url%.git}"
+            open "https://bitbucket.org/${url:18}"
+    fi
+    if [[ $git_url == git@github.com:* ]] ;
+        then 
+            url="${git_url%.git}"
+            open "https://github.com/${url:15}"
+    fi
+}
